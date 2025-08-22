@@ -2,14 +2,12 @@
  * Chapter 03 Constant_and_Casting
  * 3-1 상수
  * 3-2 casting
- * C언어에서는 상수를 const라는 키워드로 선언한다. 그리고 선언 즉시 초기화를 해야한다.
- * 하자만 java에서는 final이라는 키워드로 선언한다. 그리고 선언 즉시 초기화를 할 필요가 없다. 
  */
 
 
 class test{
     public static void main(String args[]){
-        /* 3-1 상수 */
+        /* =========== 3-1 상수  ============ */
         //3-1-0 java의 상수 선언 방식(final)
         final double PI = 3.14;
         final char FISRT_NAME = '백';
@@ -24,12 +22,13 @@ class test{
 
         //3-1-1 정수형 상수
         //정수형 byte, short, long 자료형 변수에 값을 저장하는 방식
+        //(Chpater_03-1_cpp.cpp을 부록으로 남겨놨다.)
         
         //java에서는 리터럴이 기본적으로 int형이다.
         //C에서는 리터럴이 표현되는 방식이 기본적으로 int이나 4byte가 넘어가면 long long으로 처리해준다.
         //하지만 java에서는 그런게 없다. java는 리터럴은 반드시 4byte가 할당되는 int형이다.
         int n1 = 0x12_34_56_78;
-        int n2 = 0x12_34_56_78_9;//compile error! too large number for int type.
+        //int n2 = 0x12_34_56_78_9;//compile error! too large number for int type.
 
         //따라서 byte, short형 변수에 값을 저장하는 방식은 아래와 같아야한다.
         byte n3 = 0x12;
@@ -48,7 +47,7 @@ class test{
         double f1 = 3.0;
         double f2 = 3.;
         double f3 = 3.0D; //double 형 명시.
-        float f4 = 3.0; //compile error! 마찬가지로 실수 리터럴 상수 같은 경우에는, 기본적으로 double형으로 저장되기 때문.
+        //float f4 = 3.0; //compile error! 마찬가지로 실수 리터럴 상수 같은 경우에는, 기본적으로 double형으로 저장되기 때문.
 
         //따라서 float형 변수에 값을 저장하는 방식은 아래와 같아야 한다.
         float f5 = 3.0f;
@@ -59,6 +58,23 @@ class test{
 
         
         //3-1-3 부울형 상수, 문자형 상수
+
+        //부울형 상수는 true와 false밖에 없다.
+        boolean b1 = true;
+        boolean b2 = false;
+        //문자형 상수는 '백', 'c', 'ㅣ' 이런식으로 표현한다.
+        char ch1 = '창';
         
+        //이스케이프 시퀀스
+        //키보드로 입력하기 어려운걸 문자열에 포함시킬때 사용된다.
+        System.out.println("============escape sequences============");
+
+        System.out.println("AB"+"\b"+"CD"); //back space
+        System.out.println("AB"+"\t"+"CD"); //tap
+        System.out.println("AB"+"\\"+"CD"); // \
+        System.out.println("AB"+"\""+"CD"); // "
+        System.out.println("AB"+"\n"+"CD"); // new line (개행)
+        System.out.println("AB"+"\r"+"CD"); // cursor to front
+        System.out.println("센트 표시는 이런식으로 합니다. \u20AC"); //apply unicode
     }
 }
