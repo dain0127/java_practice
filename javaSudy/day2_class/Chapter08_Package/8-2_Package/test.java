@@ -20,7 +20,7 @@ class test{
     public static void main(String args[]){
         diagram.polygon.Triangle tri = new diagram.polygon.Triangle(10, 2);
         Circle cir = new Circle(10, 3.14);
-        Rectangle rec = new Rectangle(10, 4);
+        Rectangular rec = new Rectangular(10, 4);
 
         tri.showAreaInfo();
         cir.showAreaInfo();
