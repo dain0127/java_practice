@@ -1,3 +1,3 @@
 javac -d . .\src\*
-javac .\test.java
+javac .\8-2_Package.java
 java test
