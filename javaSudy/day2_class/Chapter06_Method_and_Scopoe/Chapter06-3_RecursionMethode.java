@@ -24,7 +24,7 @@
 
 //10진수를 2진수로 변환하는 코드
 class test{
-    public static void main(String args[]){
+    public static void main(String[] args){
         showDeciToBin(10000);
     }
 

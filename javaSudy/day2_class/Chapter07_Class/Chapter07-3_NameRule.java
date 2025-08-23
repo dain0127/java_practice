@@ -1,11 +1,15 @@
 /*
- * Chapter 08 Package and Class path
- * 8-1 Class path
- * 8-2 Package
+ * Chapter07 class and instance
+ * 7-1 class의 정의와 instance의 생성
+ * 7-2 Constructor와 String class
+ * 7-3 java의 Naming Rule
  * 
- * 8-1 Class path
- * 
+ * 7-3 java의 Naming Rule
+ * class name : ClassName(카멜 케이스)
+ * method 또는 variable name : showInfo() 또는 myName(변형된 카멜 케이스)
+ * constant number(상수) name : PI (대문자)
  */
+
 
 //클래스명은 카멜케이스
 class CricleClass {
