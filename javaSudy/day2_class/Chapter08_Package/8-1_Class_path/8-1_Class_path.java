@@ -1,4 +1,3 @@
-package Chapter08_Package;
 /*
  * Chapter 08 Package and Class path
  * 8-1 Class path
@@ -19,6 +18,11 @@ package Chapter08_Package;
  * 
  * 기본적으로 class path는 cmd창의 현재 디렉토리(.) 이다.
  * 이를 설정해주고 싶으면 set classpath=.;.\classDirName 방식으로 해주면 된다. (현재 디렉토라와 classDirName으로 class를 찾는다는 뜻.)
+ * 
+ * ===========================<실습 팁>=======================================
+ * 실습을 위해서는, tset.java, "run_setClassPath.bat"의 내용을 확인한 다음,
+ * ./run_setClassPath.bat 을 실행한다.
+ * classpath 환경변수값을 set하고 java가 class파일을 잘 찾아서 실행하는 모습을 관찰하라.
  */
 
 class Person{
