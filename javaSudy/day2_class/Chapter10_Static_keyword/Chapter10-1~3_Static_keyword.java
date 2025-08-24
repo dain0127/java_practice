@@ -3,6 +3,10 @@
  * 10-1 static 맴버변수
  * 10-2 static 메소드
  * 10-3 System.out.println()과 public static void main()의 정체
+ * 10-4 static 초기화 블록
+ * 10-5 static import
+ * 
+ * <해당 소스코드는 10-1~3에 대한 설명을 기술합니다.>
  * 
  * 10-1 static 맴버변수
  * C++이랑 같다. 클래스 전용 변수이고, 모든 인스턴스가 공유하며 쓰이고 있다.
@@ -64,6 +68,7 @@
  * 그리고 class name을 대상으로 런처를 실행할때, 해당 class에 있는 main함수를 엔트리 포인트로 실핸하는 것이다.
  * 
  * 사실상 static 함수이기때문에, class 영역은 공간만 제공한 것일뿐, 별도의 독립된 함수라고 이해해도 괜찮다.
+ * 
  */
 
  /*
@@ -74,7 +79,7 @@
  */
 
 
- //아래 코드는 10-1와 10-2의 내용이다.
+//아래 코드는 10-1와 10-2의 내용을 포함한다.
 class EasyClass{
     private static int static_num=0; //static 맴버 변수. 즉, class 전용 변수.
     private int feild_num;

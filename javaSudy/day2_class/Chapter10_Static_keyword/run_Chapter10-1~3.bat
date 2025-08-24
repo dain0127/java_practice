@@ -1,4 +1,4 @@
-javac Chapter10_Static_keyword.java
+javac Chapter10-1~3_Static_keyword.java
 java EasyClass
 java Run
 java test
