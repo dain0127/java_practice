@@ -20,7 +20,6 @@
  * 
  * 
  * 번외로 String을 switch문의 option으로 삼을 수 있는 문법적 기능이 있다.
- * 
  */
 
 public class test {
