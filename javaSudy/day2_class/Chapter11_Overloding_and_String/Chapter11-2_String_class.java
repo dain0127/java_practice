@@ -12,11 +12,13 @@
  * java도 마찬가지일 것이다.
  * 
  * java에서 String은 class이긴 하지만, 고전적인 생성자 방식 뿐만아니라, 다른 방식의 초기화 방식도 존재한다.
- * 1. String str1 = new Strin("hello")
- * 2. String str2 = "hello"
+ * 1. String str1 = new Strin("hello") (heap 영역에 생성)
+ * 2. String str2 = "hello" (String Pool 영역에 생성)
  * 
- * 1번 방식은 heap segment에 생성되어. 변경할 수 있는 문자열이지만.
- * 2번 방식은 data segment에 생성되어. 변경할 수 없는 상수 문자열이 된다.
+ * 1번 방식과 2번 방식은 모두 문자열 수정이 불가능하다.(immortable 하다.)
+ * 
+ * 1번 방식은 내용이 같아도, 별도의 참조값을 생성이 가능하지만,
+ * 2번 방식은 내용이 같으면, 참조값을 공유한다.
  * 
  * 
  * 번외로 String을 switch문의 option으로 삼을 수 있는 문법적 기능이 있다.
@@ -27,8 +29,8 @@ public class test {
         String str1 = "hello"; //상수 문자열
         String str2 = "hello"; //상수 문자열. 같은 address를 가짐.
 
-        String str3 = new String("hello");  //변수 문자열. heap에 별도로 할당되어 존재.
-        String str4 = new String("hello");  //마찬가지.
+        String str3 = new String("hello"); 
+        String str4 = new String("hello");  
         
         ///참조 변수의 ==연산자는 내용의 비교가 아닌 address의 비교이다.
         if(str1 == str2){
