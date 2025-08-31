@@ -24,7 +24,7 @@
  * 번외로 String을 switch문의 option으로 삼을 수 있는 문법적 기능이 있다.
  */
 
-public class test {
+class test {
     public static void main(String args[]){
         String str1 = "hello"; //상수 문자열
         String str2 = "hello"; //상수 문자열. 같은 address를 가짐.
