@@ -51,6 +51,8 @@ class test{
 
         //따라서 float형 변수에 값을 저장하는 방식은 아래와 같아야 한다.
         float f5 = 3.0f;
+        float f6 = 3.f;
+        float f7 = .012f;
 
         //참고로 부동소수점에서 지수부분과 가수부분을 명시하여 표현하는 방식도 있다.
         double temp3 = 0.1234e3; float temp4 = 0.4321e-2f;
@@ -69,12 +71,19 @@ class test{
         //키보드로 입력하기 어려운걸 문자열에 포함시킬때 사용된다.
         System.out.println("============escape sequences============");
 
+        System.out.println("========\\b========");
         System.out.println("AB"+"\b"+"CD"); //back space
+        System.out.println("========\\t========");
         System.out.println("AB"+"\t"+"CD"); //tap
+        System.out.println("========\\\\========");
         System.out.println("AB"+"\\"+"CD"); // \
+        System.out.println("========\\\"========");
         System.out.println("AB"+"\""+"CD"); // "
+        System.out.println("========\\n========");
         System.out.println("AB"+"\n"+"CD"); // new line (개행)
+        System.out.println("========\\r========");
         System.out.println("AB"+"\r"+"CD"); // cursor to front
+        System.out.println("========\\u========");
         System.out.println("센트 표시는 이런식으로 합니다. \u20AC"); //apply unicode
     }
 }

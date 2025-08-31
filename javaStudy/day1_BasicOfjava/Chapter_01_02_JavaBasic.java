@@ -16,7 +16,10 @@
     java.exe 실행파일은 java Launcher로서 java의 byte code를 JVM에서 실행시키는 역할을 한다. (인터프리터 방식)
     
     참고로 바이트 코드라고 불리는 이유는, JVM에서 opcode의 크기가 1byte이기 때문이다.
- * 
+
+    + boolean형같은 경우에는, 내부적으로 byte로 구현된다.
+    true = 1 (1byte)
+    false = 0 (1byte)로 구현된다.
  */
 
 class test{

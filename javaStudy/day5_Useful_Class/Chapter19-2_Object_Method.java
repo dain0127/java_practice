@@ -3,10 +3,21 @@
  * 일단 Object라는 class자체가 모든 class의 상위 class이기 때문에,
  * 
  * 기본적으로 class들이 가지고 있으면 유용한 method들을 미리 정의해둔 것이다.
+ * Object class가 가지고 있는 메소드는 우리가 배운건 세가지가 있다.
+ * 1) toString()
+ * 2) equlas()
+ * 3) clone()
  * 
+ * 
+ * 1) toString()
+ * 이전에 말했다시피, System.out.println(Object obj) 따위의 기본 출력문에서,
+ * toString()의 결과물을 출력하도록 내부가 구현되어있다.
+ * 
+ * 2) equlas()
  * equls()는 본래 두 오브젝트의 내용물이 같은지 확인하는 용도로 쓰라고 Object에서 남겨둔 것이다.
  * Object class에서는 단순히 두 참조 변수의 참조값이 같은지만 확인한다.
  * 
+ * 3) clone()
  * clone()은 해당 인스턴스가 스스로의 내용을 복사하여, 힙에 할당한 참조값을 반환한다.
  * 이떄 clone()에서 깊은 복사가 필요한 맴버 변수는 잘 정의해줘야한다.
  * (String의 경우는 immutable 하기 때문에, 얕은 복사로 해도 된다. 어차피 내용은 수정 불가하니깐.
@@ -30,6 +41,11 @@ class Point implements Cloneable{
 
     public void showInfo(){
         out.println("[" + x +","+ y +"]");
+    }
+
+    @Override
+    public String toString() {
+        return "[" + x +","+ y +"]";
     }
 
     @Override
@@ -58,7 +74,6 @@ class Rectangle implements Cloneable{
     }
 
     public void showInfo(){
-
         out.print("upLeftPos : "); upLeftPos.showInfo();
         out.print("downRightPos : "); downRightPos.showInfo();
     }
