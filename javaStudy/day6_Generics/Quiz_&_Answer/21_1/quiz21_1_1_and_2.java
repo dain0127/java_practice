@@ -36,7 +36,7 @@ class Dbox<L, R>{
 }
 
 
-class quiz1_and_2 {
+class quiz21_1_1_and_2 {
     public static void main(String[] args){
         //Quiz 1
         Dbox<String, Integer> dBox1 = new Dbox<>();

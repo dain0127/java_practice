@@ -99,7 +99,7 @@ class Chapter21_1_2_1_Generic_basic{
         // -제네릭 메소드의 정의
         Box<Integer> boxI1 = BoxFactory.<Integer>makeBox(10);
         Box<Double> boxD1 = BoxFactory.makeBox(Math.E); //<...> 생략 가능.
-        //전달되는 인자 타입을 통해 컴파일러가 어떤 메소드를 호출할지 판단해줌.
+        //"전달되는 인자 타입"을 통해 컴파일러가 어떤 메소드를 호출할지 판단해줌.
         out.println(boxI1);
         out.println(boxD1);
         out.println();
