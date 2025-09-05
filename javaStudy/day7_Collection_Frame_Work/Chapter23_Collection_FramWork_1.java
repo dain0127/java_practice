@@ -1,5 +1,5 @@
 /*
- * Chapter 23. Collection FrameWork
+ * Chapter 23. Collection FrameWork 1
  * 컬렉션 프레임워크란, '자료구조'를 구현한 클래스들의 집합이다.
  * (자료구조란 데이터를 저장, 검색, 삭제 등. 데이터를 다루는 하나의 방식을 모아둔 것을 말한다.)
  * 이 클래스들은 Set, List, Queue, Map이라는 네 개의 인터페이스 중 하나를 구현한다.
@@ -95,12 +95,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 
@@ -510,5 +513,44 @@ class test{
         out.println("next(pop) : "+stk1.pop());
 
         /* ====================== 4. Map ========================== */
+
+        out.println("/* ====================== 4. Map ========================== */");
+        out.println("//---------------HashMap-------------------");
+        Map<Integer, String> hashMap1 = new HashMap<>();
+
+        hashMap1.put(45, "hello");
+        hashMap1.put(37, "bye");
+        hashMap1.put(33,"welcome");
+
+        out.println("45 : "+hashMap1.get(45));
+        out.println("37 : "+hashMap1.get(37));
+        out.println("33 : "+hashMap1.get(33));
+
+        //순회
+        Set<Integer> ks1 = hashMap1.keySet();
+        
+        for(Integer n : ks1)
+            out.println(hashMap1.get(n));
+        out.println();
+
+
+        out.println("//---------------TreeMap-------------------");
+        Map<Integer, String> treeMap1 = new TreeMap<>();
+
+        treeMap1.put(45, "hello");
+        treeMap1.put(37, "bye");
+        treeMap1.put(33,"welcome");
+
+        out.println("45 : "+treeMap1.get(45));
+        out.println("37 : "+treeMap1.get(37));
+        out.println("33 : "+treeMap1.get(33));
+
+        //순회
+        Set<Integer> ks2 = treeMap1.keySet();
+        
+        for(Integer n : ks2)
+            out.println(treeMap1.get(n));
+        out.println();
+    
     }
 }
