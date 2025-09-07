@@ -138,10 +138,7 @@ class test{
         p2.print();
         p2 = o2.getAnonymousPrinter();
         p2.print();
-
-
         out.println();        
-
     }
 
 }
