@@ -1,14 +1,28 @@
-/* Chapter 25. 열거형, 가변 인자, 어노테이션
+/* Chapter 26. 
+ * 네스티드 클래스 :
+ * 네스티드 클래스는, 클래스 내부에 정의된 클래스를 의미한다.
+ * 네스티드 클래스는 static 여부에 따라 두개로 나뉜다.
+ * 그리고 non-static 클래스. 즉, 이너 클래스는 세가지로 나뉜다.
  * 
- * 25-1 열거형
- * 25-2 가변 인자
- * 25-3 어노테이션
+ * 1. static 네스티드 클래스
+ * 아우터 클래스에서 static 키워드가 붙은 클래스이다.
+ * 그냥 static이 가지고 있는 문법적 맥락에 따라 생각하면,
+ * OuterClassName.NestedClassName 처럼, 클래스 이름에 맞춰 접근할 뿐인 독립적인 클래스임을 이해할 수 있다.
+ * 
+ * 자세한건 코드 참조.
  * 
  * 
- * 25-3 어노테이션
- * 1) @Override
- * 2) @Deprecated
- * 3) @SuppressWarnings
+ * 
+ * 2. inner 클래스 (non-static 네스티드 클래스)
+ * 이너 클래스 :
+ * 이너 클래스(inner class)는 외부 클래스와 긴밀하게 연결된 기능을 구현할 때 유용하다.
+ * 예를 들어, 외부 클래스의 필드나 메서드에 쉽게 접근해야 하는 작은 보조 객체를 만들 때 쓰면 코드가 간결하다.
+ * 
+ * 맴버 클래스 - 필드와 메소드와 동일한 위치에서 정의 
+ * 로컬 클래스 - 메소드 내에서 정의
+ * 익명 클래스 - 메소드 내에서 이름 생략 채로 정의
+ * 
+ * 
  * 
  */
 
@@ -16,9 +30,55 @@
 
 import static java.lang.System.out;
 
-class test{    
-
-    public static void main(String[] args) {
-
+class Outer{
+    private static int sNum = 0;
+    private int num = 0;
+    
+    public Outer(int n){this.num = n;}
+    public void showNum(){
+        out.println("num show from outer : "+num);
     }
+
+    static class StaticNestedClass{
+        public void addSNum(int n){sNum+=n;}
+        public void showSNum(){out.println(sNum);}
+    }
+
+    class MemberClass{
+        private int addNum = 0; //
+        MemberClass(int a){this.addNum = a;}
+
+        public void addNum(){num+=this.addNum;}
+        public void showNum(){out.println("num show from inner : " + num);}
+    }
+}
+
+class test{    
+    public static void main(String[] args) {
+        //===============static nested class====================
+
+        //===============non-static nested class====================
+        //-------------member class--------------
+        Outer o1 = new Outer(10);
+        Outer o2 = new Outer(20);
+
+        Outer.MemberClass o1m1 = o1.new MemberClass(1);
+        Outer.MemberClass o1m2 = o1.new MemberClass(2);
+        Outer.MemberClass o2m1 = o2.new MemberClass(1);
+        Outer.MemberClass o2m2 = o2.new MemberClass(2);
+
+        o1m1.addNum(); o1.showNum();
+        o1m2.addNum(); o1.showNum();
+        out.println();
+
+        o2m1.addNum(); o2.showNum();
+        o2m2.addNum(); o2.showNum();
+        out.println();        
+
+        //-------------local class--------------
+
+
+        //-------------anonymous class-------------
+    }
+
 }
