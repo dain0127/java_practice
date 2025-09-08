@@ -61,7 +61,23 @@ class Outer{
     }
 
     public Printable getAnonymousPrinter(){
+        //익명 클래스
         return new Printable() {
+            //익명 클래스는 람다가 아니다.
+            //람다가 익명클래스의 일부(메소드 하나있는 인터페이스로서만 정의)로 생각되어질 수 있다.
+            //즉, 익명클래스는 맴버도 가질 수 있고, 추가적인 메소드도 구현이 가능하다.
+            //이는 익명 클래스가 이름이 없을뿐, 본질은 필드와 메소드로 이루어졌다는 클래스인 까닭이다.
+
+            //다만, 해당 익명 클래스는 이름이 없기에, 다른 코드에 지명되어 재언급되지 못한채
+            //해당 라인이 끝나면 사라지기에, 추가적인 메소드의 정의에 대한 유용성은 회의적이다.
+            String s;
+            public void setS(String s) {
+                this.s = s;
+            }
+            public void printS(){
+                out.println("s is " + this.s + " from AnonymousClass.");
+            }
+
             @Override
             public void print() {
                 out.println("num show from AnonymousPrinter : "+num);
