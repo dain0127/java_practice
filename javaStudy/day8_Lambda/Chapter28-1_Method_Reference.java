@@ -7,10 +7,16 @@
  * 
  * 
  * 28-1 메소드 참조
+ * 메소드 참조는 람다식을 어떤 '약속'에 근거하여 표현을 줄이는 방식이다.
+ * 종류는 총 세가지가 있다.
+ * 1. static 메소드 호출
+ * 2. 인스턴스 메소드 호출(2-1. 전달인자 한 개, 2-2 전달인자 두 개)
+ * 3. 생성자 호출
+ * 
+ * 각각의 케이스에 대해서 어떤 '약속'을 전제로 메소드 이름만 참조하는지를, 파악하고 코드를 읽고 쓸줄 알아야한다.
  * 
  * 
- * 
- * 
+ * 자세한건 아래 코드 참고.
  */
 
 import static java.lang.System.out;
@@ -51,7 +57,7 @@ class test{
 
         
 
-        /* ============ 2-1. instance method 참조 1 ============== */
+        /* ============ 2-1. instance method 참조 1 (인자값 한개) ============== */
         out.println("/* ============ 2-1. instance method 참조 1 ============== */");
         class JustSort{
             public void sort(List<?> l){Collections.reverse(l);}
@@ -100,7 +106,7 @@ class test{
         li.forEach(System.out::print);
         out.println();
 
-        /* ============ 2-2. instance method 참조 2 ============== */
+        /* ============ 2-2. instance method 참조 2 (인자값 두개) ============== */
         out.println("/* ============ 2-2. instance method 참조 2 ============== */");
         class IBox{
             int n;
