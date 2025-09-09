@@ -220,8 +220,6 @@ class test{
         threeF1 = String::new; //(char[], int, int) 생성자 지정.
         String strResult4 =  threeF1.apply(chArr3, 1, 4);
         out.println("strRsult3 : " + strResult4);
-        
-
 
         /*
          * 생성자 참조의 해석방법은, ClassName::new를 볼 때.
