@@ -1,236 +1,261 @@
 /*
- * Chapter 29 스트림(stream) 개념. (스트림 1)
+ * Chapter 29 스트림(stream) 라이브러리. (스트림 2)
  * 
- * 29-1 스트림의 소개. 그리고 lazy 연산
- * 29-2 필터링과 매핑
- * 29-3 리덕션과 병렬 스트림
+ * 해당 챕터는 스트림의 생성, 중간 연산, 최종 연산의 라이브러리이다.
+ * 간단한 소개 이후. 실습할 것이다.
+ * 1) 스트림의 생성과 연결
+ * 2) 스트림의 중간 연산
+ * 3) 스트람의 최종 연산
  * 
- * 참고로 교재에서 '스트림'은 두 챕터에 걸쳐서 진행이 된다.
- * 그리고 해당 챕터(스트림 1)에서는 '스트림'에 대한 전반적인 이야기를 얇게 한다.
- * 스트림 2는 라이브러리의 성격을 갖는다.
- * 
- * 스트림은 세단계에 걸쳐서 일어나게 되는데.
- * 1) 스트림의 생성 (array, Collection)
- * 2) 중간 연산자의 호출
- * 3) 최종 연산자의 호출
- * 
- * 스트림1 에서 개념과 스트림의 생성을 간단히 소개하며,
- * 스트림 2에서 중간 연산자와 최종 연산자에 대한 자세한 메소드의 종류와 활용은 자세히 알려주게된다.
- * 
- * 
- * 
- * stream이란 java에서 배열이나 Collection에 저장된 일련의 데이터들을,
- * '가공하기 좋은 형태'로 바꾼 것을 의미한다.
- * 이때 가공하기 좋은 형태란 체이닝 메소드를 통해, 연달아 호출하여,
- * 데이터를 파이프라인에 통과시키듯 쉽게 컨트롤이 가능하다는 말이다.
- * 
- * 즉, 스트림(Stream)은 데이터 소스를 효율적으로 탐색·가공할 수 있도록 지원하는 선언적 데이터 처리 파이프라인이다.
- * 
- *
- * Stream은 자바에서 class의 일종이며, 아래 코드를 참조하면 알겠지만.
- * Stream의 생성 -> 각종 중간 연산 -> 최종 연산. 의 형태를 거쳐 원하는 데이터에 대해서 원하는 연산이 가능하다.
- * 
- * 
- * 중간 연산은 없어도 되고, 여러개를 해도 되지만.
- * 최종 연산은 반드시 있어야한다.
- * 
- * 최종 연산이 호출되기 전에는, Stream에 예약해둔, 중간 연산도 실행되지 않는다.
- * 최종 연산이 호출되어야 실행된다. 이를 지연(lazy) 연산이라고 하며, 자세한건 코드를 참조해라.
- * 즉, 최종 연산은 파이프의 여닫이를 담당하는 '잠금 벨브' 역할을 한다.
+ * 이 세가지로 나뉘어진다.
  * 
  */
 
+import static java.lang.System.exit;
 import static java.lang.System.out;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import javax.swing.Box;
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
 class test{
     public static void main(String[] args) {
-        out.println("/* ============ <29-1 스트림의 소개와 지연(lazy) 연산> =================== */");
-        out.println("/* ============ 스트림을 사용하는 이유를 보여주는 코드 =================== */");
-        //아래 배열의 짝수의 합을 구하는 기능을 코드로 구현한다고 해보자.
-        int[] ar = {1,2,3,4,5};
-
-
-        //Stream이 없을때 구현 방법.
-        //5줄
-        int sum1 = 0;
-        for(int e : ar){
-            if(e%2 == 0)
-                sum1 += e;
-        }
-        System.out.println("sum1 : " + sum1);
-
-
-        //Stream이 있을때 구현 방법. (메소드 체이닝 X)
-        IntStream stm1 = Arrays.stream(ar);
-        IntStream stm2 = stm1.filter(n -> n%2 == 0);
-        int sum2 = stm2.sum();
-        System.out.println("sum2 : " + sum2);
-
-
-        //Stream이 있을때 구현 방법. (메소드 체이닝 O)
-        //1줄
-        int sum3 = Arrays.stream(ar).filter(n -> n%2 == 0).sum();
-        out.println("sum3 : " + sum3);
-
-        /* ================== 지연(lazy) 처리 방식 ==================== */
-        out.println("/* ================== 지연(lazy) 처리 방식 ==================== */");
-        //지연 처리 방식이란. 스트림이 최종 연산이 되기 전에는,
-        //모든 중간 연산을 유예함을 의미한다.
-        //스트림은 지연(lazy) 처리 방식을 사용한다.
-
-        //아래 코드는 지연 처리 방식이 작동함을 보이는 코드이다.
-
-
-
-        List<String> li2 = List.of("a","aa","bbb");
-        li2 = new LinkedList<>(li2);
-
-        //중간 연산들... 세팅만 해놓는다.
-        Stream<String> tempStm1 = li2.stream().filter(s ->{
-            out.println("filter : " + s);
-            return s.length() > 1;
-        })
-        .map(s -> {
-            out.println("map : " + s);
-            return s.toUpperCase();            
-        });
-        
-
-        out.println("다른거 하는 중...");
-        out.println("다른거 하는 중...");
-        out.println("다른거 하는 중...");
-
-        tempStm1.forEach(out::println);
-        out.println();
-        
-        /* ================== Stream 인스턴스 생성 방식 두가지 ==================== */
-        out.println("/* ================== Stream 인스턴스 생성 방식 두가지 ==================== */");
-        //1) array.
+        /* ============ 1) 스트림의 생성과 연결 ================ */
+        out.println("/* ============ 1) 스트림의 생성과 연결 ================ */");
+        /* ------------ 스트림의 생성 ---------------- */
+        //Chapter 29에서 설명한 stream 생성 방법 두가지.
+        //1) array.   Arrays.stream()로 호출
+        //용도 : 이미 존재하는 array에 대해서 유용함.
         int[] intArr1 = {1,2,3,4,5};
         Arrays.stream(intArr1) //array의 스트림 생성. Arrays의 static 메소드. stream(T [])을 호출한다.
         .sorted() //중간 연산자 
         .forEach(out::print); //최종 연산자
-
         out.println();
 
-        //2) Collection
+        //2) Collection.   collectionName.stream()로 호출
+        //용도 : 이미 존재하는 Collection에 대해서 유용함.
         Set<Character> charSet1 = new HashSet<Character>(Arrays.asList('A','C','Z','D'));
         charSet1.stream() //Collection의 스트림 생성. collecion에 존재하는 디폴트 메소드. stream()을 호출한다.
         .sorted()
         .forEach(out::print);
-        
-        out.println();
-        
-        /* ================== 29-2 중간 연산자 간단 소개 : 필터링과 매핑 ==================== */
-        out.println("/* ================== <29-2 중간 연산자 간단 소개 : 필터링과 매핑> ==================== */");
-        
-        //간단하다. 필터링은 걸러주고. 매핑은 바꿔준다.
-        //각각 Predicate와 Function 참조값을 요구하며, 알맞은 람다값을 호출하면 된다.
-        //자세한건 아래 코드 참고.
-
-        // ---------------- 실습 -----------------
-        //이 String 배열에서 5글자 이상을, 사전순으로 정렬하여, 대문자로 바꿔, 출력해라.
-        List<String> li1 = Arrays.asList("Hello", "bye", "changin", "apple", "comphrehand", "interprete", "difference");
-        li1 = new LinkedList<>(li1);
-        li1.stream()
-        .filter(s -> s.length() >= 7).sorted()
-        .map(s -> s.toUpperCase())
-        .forEach(out::println);
-        
         out.println();
 
+        out.println();
 
-        //Quiz 29-1. 1번문제. 2번문제.
-        class Box<T>{
-            private T ob;
-            public Box(T o){this.ob = o;}
-            public T get(){return this.ob;}
+        //3) Stream.of()  스트림 생성에 필요한 데이터를 직접 전달.
+        //용도 : 일반적으로 사용할 수 있음.
+        Stream.of(1,2,3).filter(n -> n%2==0).forEach(out::print);
+        out.println();
+        Stream.of("hello","bye","welcome").filter(s->s.length() >=5).forEach(s -> out.print(s+ " ")); 
+        out.println();
+        Stream.of(Arrays.asList("BB","A","CCC")).sorted().forEach(out::print); 
+        out.println();
+
+        out.println();
+
+        //기본 자료형 특화 클래스
+        //IntStream, DoubleStream... 등. 마찬가지로 오토 박싱 및 언박싱 연산을 생략하기 위한, 특화 클래스가 존재한다.
+        //정수형 클래스같은 경우,
+        //public static range(int startIndex, int endExclusive)
+        //public static rangeClosed(int startIndex, int endExclusive)
+        //가 있어 데이터 생성에 대해서 편의를 더해준다.
+        IntStream iStream1 = IntStream.of(3,2,4,1);
+        out.println("sum : " + iStream1.sum());
+        DoubleStream dStream1 = DoubleStream.of(3.,2.,4.,1.);
+        out.println("sum : " + dStream1.reduce(0.,Double::max));
+        LongStream lStream1 = LongStream.of(3L,2L,5L,10L);
+        out.println("sum : " + lStream1.sum());
+        out.println();
+
+        IntStream.range(0,10).forEach(n -> out.print(n + " "));
+        out.println();
+        IntStream.rangeClosed(0,10).forEach(n -> out.print(n + " "));
+        out.println();
+        out.println();
+
+
+        //병렬 스트림으로의 전환
+        List<Integer> li1 = Arrays.asList(1,3,5,6,2,7);
+        Stream<Integer> iStm1 = li1.stream();
+
+        BinaryOperator<Integer> biOper1 = Integer::max;
+        
+        iStm1.parallel();//일반 스트림에서, 병렬 스트림으로 전환.
+        int result1 = iStm1.reduce(0,biOper1);
+        out.println("result1 : "+ result1);
+        out.println();
+
+        /* ------------ 스트림의 연결 ---------------- */
+        Stream<String> strStm1 = Stream.of("hello","yes");
+        Stream<String> strStm2 = Stream.of("bye","no");
+
+        Stream.concat(strStm1, strStm2).forEach(s->out.print(s+ " "));
+        out.println();
+
+        /* ============ 2) 스트림의 중간 연산 ================ */
+        out.println("/* ============ 2) 스트림의 중간 연산 ================ */");
+        //---------------flatMap()-----------------
+        /*
+         * map에는 단순히 map이 있을 뿐만 아니라,
+         * flatMap이라는 종류의 메소드 또한 존재하다.
+         * 
+         * 이전의 Optional 클래스에서도 봤다시피, flatMap은 반환형이 포장된 클래스 그 자체를 반환한다.
+         * 즉, Stream을 반환한다.
+         * 
+         * flatMap()의 중요한 장점은, map()이 1대1 변환만이 가능했던 것과 달리,
+         * flatMap()은 1대 다의 매핑을 가능하게 해준다.
+         * 
+         * 자세한건 아래 예제를 참고하라.
+         */
+
+        class ReportCard{
+            private int kor;
+            private int eng;
+            private int math;
+
+            public ReportCard(int k, int e, int m){
+                this.kor = k;              
+                this.eng = e;              
+                this.math = m;              
+            }
+
+            public int getKor(){return this.kor;}
+            public int getEng(){return this.eng;}
+            public int getMath(){return this.math;}
         }
 
-        //1번 문제
-        List<Box<String>> liBox1 = Arrays.asList(new Box<String>("hello"), new Box<String>("bye"));
-        liBox1.stream()
-        .map(b->b.get()) //Stream< Box<String> > -> Stream< String >
-        .forEach(out::println);
-
-        out.println();
-
-        //2번 문제
-        liBox1.stream()
-        .map(b->b.get().length())
-        .forEach(out::println);
-
-        out.println();
-
-        /* ================== 29-3 리덕션(Reduction)과 병렬 스트림(Parallel Streams) ==================== */
-        out.println("/* ================== <29-3 리덕션(Reduction)과 병렬 스트림(Parallel Streams)> ==================== */");
-        out.println("/* ========== 1) 리덕션(Reduction)과 reduce() ============ */");
-        /*
-         * 리덕션(Reduction)이란 '데이터를 축소하는 연산'을 일컫는다.
-         * 
-         * sum() (스트림에 있는 데이터를 전부 합한 결과를 반환)과 같은 최종연산 메소드가 리덕션이다.
-         * 이를 선언적으로 사용 가능한 것이 reduce() 메소드이다.
-         * 
-         * reduce() 또한 최종연산자이다.
-         * 
-         * BinaryOperator<T> 인터페이스에 정의된 T apply(T,T)를 순차적으로 모든 요소에 적용하여,
-         * 결과적으로 하나로 줄이는 방식이다.
-         * 
-         */
-
-    
-        //합 구하기.
-        List<Integer> li3 = Arrays.asList(1,3,4,2,5);
-        li3 = new LinkedList<>(li3);
-
-        int result1 = li3.stream()
-        .reduce(0,Integer::sum); //메소드 참조 2-2. 상기하여라.
-
-        out.println("result1 : " + result1);
-        out.println();
-
-        //가장 긴 문자열 출력하기
-        List<String> li4 = Arrays.asList("A","BB","CCCCC","DDD");
-        li4 = new LinkedList<>(li4);
-
-        String result2 = li4.stream()
-        .reduce("",(s1, s2) -> s1.length() > s2.length() ? s1 : s2);
-
-        out.println("result2 : " + result2);
-        out.println();
-
-
-        out.println("/* ========== 2) 병렬 스트림(Paralle Stream) ============ */");
-        /*
-
-         * 병렬 스트림이란. 요즘같은 멀티 코어 시대에서,
-         * 여러개의 코어로 reduce 연산을 동시에 진행하여, 연산의 단계를 줄이는 방식을 사용한다.
-         * 즉, 토너먼트 방식에 가깝게 만들어, O(log(N))에 가깝게 성능을 줄이려는 목적이 있다.
-         * 
-         */
-
-
-        List<Integer> li5 = new ArrayList<>();
-        Random rand1 = new Random();
-
-        for(int i=0;i<100;i++)
-            li5.add(rand1.nextInt(1000));
+        Stream<ReportCard> rStm1 = Stream.of(new ReportCard(100, 90, 70));
+        Stream<ReportCard> rStm2 = Stream.of(new ReportCard(60, 60, 80));
+        Stream<ReportCard> allRStm1 = Stream.concat(rStm1, rStm2);
         
-        int resultMax = li5.parallelStream()
-        .reduce(-1, Integer::max);
-        out.println("resultMax : " + resultMax);
+        IntStream allIntStm1 = allRStm1.flatMapToInt(r -> IntStream.of(r.getKor(),r.getEng(),r.getMath()));
+        double avgResult1 = allIntStm1.average().getAsDouble();
+        out.println("avg : " + avgResult1);
+        out.println();
+
+        //--------------sort()---------------
+        //마찬가지로 Comparable<T> 를 상속한 클래스에 대한 sort 연산이 있고,
+        //직접 비교 기준을 제시하는. Comparator(T o1, T o2) 인스턴스를 같이 넘기는 방식이 있다.
+        
+        
+        //Comparable<T>를 상속한 클래스에 대한 정렬
+        Stream.of("AAA","C","BB")
+        .sorted()
+        .forEach(s -> out.print(s+ " "));
+        out.println();
+
+        //Comparator<T>의 인스턴스에 있는 compare정렬 기준을 통해 정렬
+        Stream.of("AAA","C","BB")
+        .sorted((s1,s2) -> s1.length() - s2.length())
+        .forEach(s -> out.print(s+ " "));
+        out.println();
+
+        out.println();
+
+        //--------------peek()------------------
+        //forEach()의 중간연산 버전이다.
+        
+        IntStream.of(1,2,3,4,5)
+        .peek(n->out.print(n*2+" "))
+        .sum();
+        out.println();
+        out.println();
+
+
+        /* ============ 3) 스트림의 최종 연산 ================ */
+        out.println("/* ============ 3) 스트림의 최종 연산 ================ */");
+
+        //sum, count, average, min, max
+        out.println("---------sum(), count(), average(), min(), max()---------");
+        //수 관련 스트림(IntStream, DoubleStream, LongStream 등만 가능)
+        int iResult1 = IntStream.of(1,3,5,7,9)
+        .sum();
+        out.println("sum : " + iResult1);
+
+        long lResult1 = IntStream.of(1,3,5,7,9)
+        .count();
+        out.println("count : " + lResult1);
+
+        double dResult1 = IntStream.of(1,3,5,7,9)
+        .average().orElse(0.);
+        out.println("average : " + dResult1);
+
+        iResult1 = IntStream.of(1,3,5,7,9)
+        .min().orElse(100);
+        out.println("min : " + iResult1);
+
+        iResult1 = IntStream.of(1,3,5,7,9)
+        .max().orElse(0);
+        out.println("max : " + iResult1);
+
+        out.println();
+        
+        //forEach()
+        out.println("---------forEach()---------");
+        IntStream.of(1,3,5,7,9)
+        .forEach(n->out.print(n+"\t"));
+        out.println();
+
+        out.println();
+
+        //allMatch(), anyMatch(), noneMatch()
+        out.println("---------allMatch(), anyMatch(), noneMatch()---------");
+        Consumer<Boolean> con = out::println;
+        boolean boolResult1;
+
+        boolResult1 = IntStream.of(0,1,2)
+        .allMatch(n -> n>=0);
+        con.accept(boolResult1);
+
+        boolResult1 = IntStream.of(0,1,2)
+        .anyMatch(n -> n==1);
+        con.accept(boolResult1);
+
+        boolResult1 = IntStream.of(0,1,2)
+        .noneMatch(n->n>100);
+        con.accept(boolResult1);
+        out.println();
+
+        //collect().
+        out.println("---------collect()---------");
+        //스트림은 한번 사용되면, 다시는 되돌릴 수 없다.
+        //그렇기 때문에 중간 연산, 최종 연산 이전에 스냅샷 개념으로,
+        //'현재' 스트림의 데이터를 원하는 저장소에 저장하도록 해준다.
+
+        //시그니처는 다음과 같다.
+        //<R> R collect(Supplier<R> sup, BiComsumer<R, ? super T> accumulator, BiComsumer <R, R> combiner)
+        //sup는 저장할 저장소를 생성하는 기능을 정의받는다.
+        //accumulator는 저장소 R에 T를 저장하는 기능을 정의받는다.
+        //combiner는 저장소 R1과 R2를 합치는 기능을 정의받는다.
+
+        //3번째 인자의 존재 이유는 collect가 병렬 스트림에서 다르게 작동하기에, 시그니처의 각 파라미터가 이와 같은 역할을 하는 것이다.
+        //(reduce() 를 상기하면 된다.)
+
+
+        //순차 스트림
+        List<Integer> iList1 = 
+        Stream.of(1,2,3,4,5)
+        .filter(n -> n%2 == 1) //홀수만 통과
+        .collect(ArrayList<Integer>::new, (c,e)->c.add(e) ,(c1, c2)->c1.addAll(c2));
+
+        out.println(iList1);
+
+        //병렬 스트림
+        List<Integer> iList2 =
+        Stream.of(1,2,3,4,5)
+        .parallel() //병렬 스트림으로 변경
+        .filter(n -> n%2 == 1) //홀수만 통과
+        .collect(ArrayList<Integer>::new, (c,e)->c.add(e), (c1,c2)->c1.addAll(c2));
+
+        out.println(iList2);
     }
 }
