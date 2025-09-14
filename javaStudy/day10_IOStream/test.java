@@ -2,14 +2,23 @@ import static java.lang.System.out;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.Writer;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Random;
@@ -265,5 +274,195 @@ class test{
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //======================= f. 문자 스트림 =============================
+        out.println("//===================== f. 문자 스트림 ========================");
+        /*
+         * 시스템과 자바 프로그램의 인코딩 방식의 차이가 있을 수 있다.
+         * 때문에 '문자'와 관련된 데이터를 읽고 쓸때에는, 각 플렛폼에 알맞는 인코딩 방식으로 '변환' 해주는 스트림이 필요하다.
+         * 
+         * 문자 데이터의 경우에는 단순히 데이터를 옮기는 것 만으로는 해결되지 않기 때문이다.
+         * 실제적으로 저장된 바이너리 데이터 '그 자체'는 같을지 몰라도 인코딩 방식에 따른 '해석'의 차이가 존재하기 때문이다.
+         * 
+         * 다시 말하자면, 데이터는 같으나 의미가 달라질 수 있다는 뜻이다.
+         * 
+         * 예를 들어, java 프로그램 내에서는 문자 데이터가 '유니코드' 방식의 인코딩 방식(내지는 문자셋)을 사용한다면,
+         * 윈도우의 메모장 프로그램은 '코드페이지 949'라는 인코딩 방식으로 문자를 해석한다.
+         * 
+         * 때문에 플랫폼 별로 각기 다른 인코딩 방식에 대한 '자동적인 호환'기능이 들어있는 I/O 스트림인 '문자 스트림'의
+         * 필요성이 생긴다.
+         * 
+         * 사용례는 아래 코드를 참고하면 된다.
+         * 
+         */
+
+        //문자 스트림을 사용한 예시
+        try (Writer out1 = new FileWriter("f_character.txt")) {
+            out1.write('A');
+            out1.write('B');
+            out1.write('\n');
+            out1.write("hello world\n");
+            out1.write('한');
+            out1.write('글');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //바이트 스트림을 사용한 예시
+        //바이트 스트림을 사용해 write한 문서의 경우, 인코딩 방식이 달라 문자가 깨져서 나오는 것을 확인하라.
+        try (OutputStream out1 = new FileOutputStream("f_byte.txt")) {
+            out1.write('A');
+            out1.write('B');
+            out1.write('\n');
+            out1.write('한');
+            out1.write('글');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        //문자 스트림을 통해 시스템에서 파일을 읽어, 'java 프로그램'에서 출력하는 코드.
+        try (Reader in1 = new FileReader("text_origin.txt")) {
+            int ch;
+
+            while (true) {
+                ch = in1.read();
+                if(ch == -1)
+                    break;
+                out.print((char)ch);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        out.println();
+
+        //바이트 스트림을 통해 시스템에서 파일을 읽어, 'java 프로그램'에서 출력하는 코드.
+        //해당 코드가 출력이 될때에는 문자들이 깨져서 출력됨을 주목하라.
+        try (InputStream in1 = new FileInputStream("text_origin.txt")) {
+            int ch;
+            while (true) {
+                ch = in1.read();
+                if(ch == -1)
+                    break;
+                out.print((char)ch);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.println();
+
+        /*
+         * 참고로. 문자 스트림또한. 그만의 필터 스트림이 존재한다.
+         * 이때 이미 문자형 데이터를 저장했다는 면에서, 굳이 데이터 스트림으로의 필요성보다는.
+         * '버퍼 스트림'이 사용된다.
+         * 
+         * 이때 Writer/Reader의 맞추어서 BufferedReader/BufferedWriter 가 쓰여진다.
+         * 
+         * 사용법 또한 같으며 개념도 같다.
+         * 
+         * 다만 문자가 버퍼로 쌓이면 '문자열'이다.
+         * 즉, 문자열로 모아서 한거번에 전송하는 기능이 있다.
+         * 
+         * 이에 따른 BufferedReader/BufferedWriter 만의 API가 존재한다.
+         * readLine() 문자열 단위로 읽는 것.(구분자는 해당 시스템의 '개항')
+         * write(String s, int off, int len) s를 off부터 시작헤 len까지의 문자를 쓰기.
+         * 혹은 write(String s)
+         * 
+         * 가 그러하다.
+         * 
+         */
+
+        //최종적으로, 자바로부터 나온 문자열을, 시스템의 텍스트 파일에 저장하고.
+        //그 텍스트 파일을 다시 자바 프로그램으로 옮기는 코드
+        String kr_str1 = new String("안녕. 나는 한글 문자열이야.");
+        String en_str1 = new String("hello, I'm english String.");
+
+        try (BufferedWriter in1 = new BufferedWriter(new FileWriter("f_test.txt"))) {
+            
+            in1.write(kr_str1);
+            in1.newLine();
+            in1.write(en_str1);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedReader out1 = new BufferedReader(new FileReader("f_test.txt"))) { 
+            String str;
+            while (true) {
+                str = out1.readLine();
+                if(str == null)
+                    break;
+                out.println(str);
+            }
+        
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //======================= g. 오브젝트 스트림 =============================
+        out.println("//===================== g. 오브젝트 스트림 ========================");
+        /*
+         * 오브젝트 또한 파일에 읽고 쓸수 있는 대상이다.
+         * 당연히 바이트 스트림으로 해야한다.
+         * 
+         * 오브젝트 스트림(ObjectInputStream/ObjectOutputStream)같은 경우에는
+         * 필터 스트림과 유사하지만, '필터 스트림'이 아니다.
+         * 그 이유는 필터 스트림이 공통적으로 상속하는, FilterInputStream/FilterOutputStream을 상속하지 않음을 의미한다.
+         * 그 말인 즉슨, 필터 스트림들의 클래스가 가지는 공통적인 규약에서 벗어난, 예외적인 인터페이스를 가졌음을 추측할 수 있다.
+         * 그럼에도 필터 스트림과 비슷하다고 한 이유는, 사용법이나 보조적인 기능을 한다는 점에서 그러하다는 것이다.
+         * 
+         * 오브젝트 스트림을 사용할때는, 기본 자료형 대신, 인스턴스 자체를 read / write 메소드 따위의 인자로 넘겨주면 된다.
+         * 
+         * 클래스에 Serializable이라는 마커 인터페이스가 구현이 되어야, 오브젝트 스트림을 통해 파일에 읽기/쓰기가 가능하다.
+         * 
+         * 클래스를 정의할때 필드에 transient라는 키워드를 붙이면, 해당 필드는 파일에 입출력할때, null이나 0으로 읽고/써진다.
+         * 
+         */
+
+        class SBox implements Serializable {
+            String str;
+            transient String str_trans;
+            SBox(String s){
+                this.str = s;
+                this.str_trans = s; 
+            }
+            @Override
+            public String toString() {return str;}
+            public String getTransString(){return str_trans;}
+        }
+
+        SBox sbox1 = new SBox("one");
+        SBox sbox2 = new SBox("two");
+
+        //인스턴스의 데이터를 파일에 저장(직렬화(Serialization)).
+        try (ObjectOutputStream out1 = new ObjectOutputStream(new FileOutputStream("g_objectStreamTest.dat"))) {
+            out1.writeObject(sbox1);    
+            out1.writeObject(sbox2);    
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SBox sbox3;
+        SBox sbox4;
+
+        //파일의 인스턴스 데이터를 자바 프로그램에 불러오기(역직렬화(Deserialization))
+        try (ObjectInputStream in1 = new ObjectInputStream(new FileInputStream("g_objectStreamTest.dat"))) {
+            sbox3 = (SBox)in1.readObject();
+            sbox4 = (SBox)in1.readObject();           
+
+            out.println(sbox3);
+            out.println(sbox4);
+
+            out.println("trans string : " + sbox3.getTransString());
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }

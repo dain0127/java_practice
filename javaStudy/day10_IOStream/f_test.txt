@@ -1,0 +1,2 @@
+안녕. 나는 한글 문자열이야.
+hello, I'm english String.
