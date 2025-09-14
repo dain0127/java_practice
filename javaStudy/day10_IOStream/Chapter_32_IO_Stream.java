@@ -24,6 +24,23 @@ import java.time.Instant;
 import java.util.Random;
 import java.util.Scanner;
 
+/*
+ * Chapter 32 IO Stream
+ * 흔히 나오는 파일 입출력에 대한 이야기이다.
+ * 
+ * 다만 java는 파일 입출력에 여러가지 유용하고 필요한 기능이 존재하니 참조할 필요가 있다.
+ * 목차는 아래와 같으며, 코드와 주석을 통해 상세한 설명과 실습을 하길 바란다.
+ * 
+ * //===================a. 기본적인 파일 열기, 읽기 및 쓰기, 닫기 API.========================
+ * //====================== b. 파일 복사 코드 ===============================
+ * //============ c. 필터스트림 (1) DataInputStream/DataOutputStream ==============
+ * //============= d. 필터스트림 (2) BufferedInputStream/BufferedOutputStream ===========
+ * //============= e. Data Input/Output Stream과 Buffered Input/Output Stream을 연달아 잇기 ===========
+ * //======================= f. 문자 스트림 =============================
+ *  //======================= g. 오브젝트 스트림 =============================
+ * 
+ */
+
 class test{
     public static void main(String[] args) throws IOException {
         /*
