@@ -1,0 +1,2 @@
+del nio2_data_stream_test1.dat
+del nio2_buffered_character_stream_test1.dat

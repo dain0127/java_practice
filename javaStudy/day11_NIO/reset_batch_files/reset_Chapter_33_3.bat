@@ -1,0 +1,3 @@
+del nio_src_file_to_channel.txt
+del nio_dst_file_to_channel.txt
+del nio_random_file_to_channel.txt
